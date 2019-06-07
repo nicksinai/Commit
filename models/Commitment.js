@@ -27,7 +27,7 @@ const CommitmentSchema = new mongoose.Schema({
     },
     checkins: {
         type: Number,
-        required: true
+        default: 0
     }
 });
 
