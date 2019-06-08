@@ -11,7 +11,7 @@ const User = require('../../models/User');
 // @access  Private
 router.get('/me', auth, async (req, res) => {
     try {
-        const commitment = await Commitment.findOne({ user: req.body.id });
+        const commitment = await Commitment.findOne({ user: req.user.id });
         if (!commitment) {
             return res
                 .status(400)
@@ -61,6 +61,7 @@ router.post(
         if (weeks) commitmentFields.weeks = weeks;
         if (gym) commitmentFields.gym = gym;
         if (price) commitmentFields.price = price;
+        commitmentFields.lastSuccesfulCheckin = null;
 
         try {
             // Update

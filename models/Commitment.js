@@ -28,6 +28,10 @@ const CommitmentSchema = new mongoose.Schema({
     checkins: {
         type: Number,
         default: 0
+    },
+    lastSuccesfulCheckin: {
+        type: Date,
+        default: undefined
     }
 });
 
