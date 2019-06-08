@@ -25,6 +25,9 @@ const CommitmentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    weeksRemaining: {
+        type: Number
+    },
     checkins: {
         remaining: {
             type: Number
