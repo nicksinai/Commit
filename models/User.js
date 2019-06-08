@@ -14,19 +14,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    active: {
-        type: Boolean,
-        default: false
-    },
-    gym: {
-        type: String
-    },
-    paymentInfo: {
-        type: String
-    },
-    lastCheckin: {
-        type: Date
-    },
     created: {
         type: Date,
         default: Date.now
