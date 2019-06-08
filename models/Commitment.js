@@ -29,6 +29,9 @@ const CommitmentSchema = new mongoose.Schema({
         remaining: {
             type: Number
         },
+        lastSuccesfulCheckin: {
+            type: Date
+        },
         history: [
             {
                 success: {
@@ -44,9 +47,6 @@ const CommitmentSchema = new mongoose.Schema({
                 }
             }
         ]
-    },
-    lastSuccesfulCheckin: {
-        type: Date
     }
 });
 
