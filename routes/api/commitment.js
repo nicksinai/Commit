@@ -25,7 +25,7 @@ router.get('/me', auth, async (req, res) => {
 });
 
 // @route   POST api/commitment
-// @desc    Create or update user's commitment
+// @desc    Create a new user commitment
 // @access  Private
 router.post(
     '/',
@@ -50,6 +50,44 @@ router.post(
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
+        }
+        // Destructure the request
+        const { days, weeks, gym, price } = req.body;
+
+        // Build commitment object
+        const commitmentFields = {};
+        commitmentFields.user = req.user.id;
+        if (days) commitmentFields.days = days;
+        if (weeks) commitmentFields.weeks = weeks;
+        if (gym) commitmentFields.gym = gym;
+        if (price) commitmentFields.price = price;
+
+        try {
+            // Update
+
+            // let commitment = await Commitment.findOne({
+            //     user: req.user.id
+            // });
+
+            // if (profile) {
+            //     // Update
+            //     profile = await Profile.findOneAndUpdate(
+            //         { user: req.user.id },
+            //         { $set: profileFields },
+            //         { new: true }
+            //     );
+
+            //     return res.json(profile);
+            // }
+
+            // Create
+            commitment = new Commitment(commitmentFields);
+
+            await commitment.save();
+            res.json(commitment);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
         }
     }
 );
