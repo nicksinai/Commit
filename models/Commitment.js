@@ -26,12 +26,27 @@ const CommitmentSchema = new mongoose.Schema({
         default: Date.now
     },
     checkins: {
-        type: Number,
-        default: 0
+        remaining: {
+            type: Number
+        },
+        history: [
+            {
+                success: {
+                    type: Boolean,
+                    required: true
+                },
+                loction: {
+                    type: String
+                },
+                created: {
+                    type: Date,
+                    default: Date.now
+                }
+            }
+        ]
     },
     lastSuccesfulCheckin: {
-        type: Date,
-        default: undefined
+        type: Date
     }
 });
 
