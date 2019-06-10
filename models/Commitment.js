@@ -26,14 +26,17 @@ const CommitmentSchema = new mongoose.Schema({
         default: Date.now
     },
     weeksRemaining: {
-        type: Number
+        type: Number,
+        required: true
     },
     checkins: {
         remaining: {
-            type: Number
+            type: Number, 
+            required: true
         },
         lastSuccesfulCheckin: {
-            type: Date
+            type: Date,
+            required: true
         },
         history: [
             {

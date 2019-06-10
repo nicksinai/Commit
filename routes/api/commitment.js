@@ -11,7 +11,11 @@ const User = require('../../models/User');
 // @access  Private
 router.get('/me', auth, async (req, res) => {
     try {
-        const commitment = await Commitment.findOne({ user: req.user.id });
+        const commitment = await Commitment.find({
+            user: req.user.id,
+            // TODO: Needs to get the active commitment (with weeks remaining > 0)
+            weeks: { $gt: 10 }
+        });
         if (!commitment) {
             return res
                 .status(400)
@@ -61,7 +65,15 @@ router.post(
         if (weeks) commitmentFields.weeks = weeks;
         if (gym) commitmentFields.gym = gym;
         if (price) commitmentFields.price = price;
-        commitmentFields.lastSuccesfulCheckin = null;
+        commitmentFields.weeksRemaining = weeks;
+
+        // Build checkins object
+        commitmentFields.checkins = {};
+        commitmentFields.checkins.remaining = days;
+        // Initializing to some date in the past for new users so that
+        // there are no collisions when they make their first checin
+        // Also that's my birthday :)
+        commitmentFields.checkins.lastSuccesfulCheckin = new Date(1995, 3, 3);
 
         try {
             // Update
