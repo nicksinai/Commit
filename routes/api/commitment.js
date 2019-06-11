@@ -70,29 +70,12 @@ router.post(
         // Build checkins object
         commitmentFields.checkins = {};
         commitmentFields.checkins.remaining = days;
-        // Initializing to some date in the past for new users so that
-        // there are no collisions when they make their first checin
-        // Also that's my birthday :)
+        // Instead of keeping null, I'm initializing to some date in the past.
+        // Prevents me from having to check if there is no last checkin,
+        // I can always check if it was in the past or not.
         commitmentFields.checkins.lastSuccesfulCheckin = new Date(1995, 3, 3);
 
         try {
-            // Update
-
-            // let commitment = await Commitment.findOne({
-            //     user: req.user.id
-            // });
-
-            // if (profile) {
-            //     // Update
-            //     profile = await Profile.findOneAndUpdate(
-            //         { user: req.user.id },
-            //         { $set: profileFields },
-            //         { new: true }
-            //     );
-
-            //     return res.json(profile);
-            // }
-
             // Create
             commitment = new Commitment(commitmentFields);
 
@@ -104,5 +87,18 @@ router.post(
         }
     }
 );
+
+// @route   PUT api/commitment/checkin/history
+// @desc    Add commitment checkin history
+// @access  Private
+router.put('/checkin/history', auth, async (req, res) => {
+    // Build checkin history object
+
+    try {
+    } catch (err) {
+        console.error(error.msg);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router;

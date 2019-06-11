@@ -31,7 +31,7 @@ const CommitmentSchema = new mongoose.Schema({
     },
     checkins: {
         remaining: {
-            type: Number, 
+            type: Number,
             required: true
         },
         lastSuccesfulCheckin: {
@@ -45,7 +45,8 @@ const CommitmentSchema = new mongoose.Schema({
                     required: true
                 },
                 loction: {
-                    type: String
+                    type: String,
+                    required: true
                 },
                 created: {
                     type: Date,
