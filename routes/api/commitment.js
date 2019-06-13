@@ -12,9 +12,9 @@ const User = require('../../models/User');
 router.get('/me', auth, async (req, res) => {
     try {
         const commitment = await Commitment.find({
-            user: req.user.id,
+            user: req.user.id
             // TODO: Needs to get the active commitment (with weeks remaining > 0)
-            weeks: { $gt: 10 }
+            // weeks: { $gt: 7 }
         });
         if (!commitment) {
             return res
