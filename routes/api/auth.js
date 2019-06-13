@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 const User = require('../../models/User');
+const Commitment = require('../../models/Commitment');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator/check');
@@ -61,13 +62,27 @@ router.post(
                 }
             };
 
+            // Check if user has active commitment
+            // Get user's commitments
+            const commitments = await Commitment.find({ user }).sort(
+                '-created'
+            );
+            let active;
+            if (commitments.length) {
+                // Check if most recent commitment has weeks remaining
+                active = commitments[0].weeksRemaining ? true : false;
+            } else {
+                // No commitments
+                active = false;
+            }
+
             jwt.sign(
                 payload,
                 config.get('jwtSecret'),
                 { expiresIn: 360000 }, // Change back to 3600 for prod
                 (err, token) => {
                     if (err) throw err;
-                    return res.json({ token });
+                    return res.json({ token, active });
                 }
             );
         } catch (err) {
