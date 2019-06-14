@@ -34,17 +34,13 @@ const CommitmentSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        lastSuccesfulCheckin: {
-            type: Date,
-            required: true
-        },
         history: [
             {
                 success: {
                     type: Boolean,
                     required: true
                 },
-                loction: {
+                location: {
                     type: String,
                     required: true
                 },

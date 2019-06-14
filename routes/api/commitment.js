@@ -71,10 +71,6 @@ router.post(
         // Build checkins object
         commitmentFields.checkins = {};
         commitmentFields.checkins.remaining = days;
-        // Instead of keeping null, I'm initializing to some date in the past.
-        // Prevents me from having to check if there is no last checkin,
-        // I can always check if it was in the past or not.
-        commitmentFields.checkins.lastSuccesfulCheckin = new Date(1995, 3, 3);
 
         try {
             // Create
@@ -89,15 +85,52 @@ router.post(
     }
 );
 
-// @route   PUT api/commitment/checkin/history
-// @desc    Add commitment checkin history
+// @route   PUT api/commitment/checkin
+// @desc    Verify checkin and update commitment
 // @access  Private
+// @note    This could do with a refactor to separate concerns
 router.put('/checkin/history', auth, async (req, res) => {
-    // Build checkin history object
+    // Bring in user's commitment
+    // Handle if user has already had a successful checkin today
+    // Handle if location doesn't match user's gym
+    // Decrement checkins remaining
+    // Update checkin history
+    // Save
 
+    // Obtain user's location from request body
+    const location = req.body.location;
+
+    // Determine if location matches commitment gym
+    let commitment;
+    let success;
     try {
+        commitment = await Commitment.findOne({ user: req.user.id });
+
+        // Compare locations and update commitment accordingly
+        if (location == commitment.gym) {
+            // Match: decrement remaining checkins
+            success = true;
+        } else success = false;
     } catch (err) {
-        console.error(error.msg);
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+    // Build checkin object
+    const newCheckin = {
+        success,
+        location
+    };
+
+    // Save checkin to checkin history
+    try {
+        commitment.checkins.history.unshift(newCheckin);
+
+        await commitment.save();
+
+        res.json(commitment);
+    } catch (err) {
+        console.error(err.message);
         res.status(500).send('Server Error');
     }
 });
