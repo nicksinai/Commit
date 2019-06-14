@@ -7,21 +7,22 @@ const Commitment = require('../../models/Commitment');
 const User = require('../../models/User');
 
 // @route   GET api/commitment/me
-// @desc    Get current user's commitment
+// @desc    Get current user's active commitment
 // @access  Private
 router.get('/me', auth, async (req, res) => {
     try {
-        const commitment = await Commitment.find({
-            user: req.user.id
-            // TODO: Needs to get the active commitment (with weeks remaining > 0)
-            // weeks: { $gt: 7 }
-        });
-        if (!commitment) {
+        // Get all of a user's commitments
+        const commitments = await Commitment.find({ user: req.user.id }).sort(
+            '-created'
+        );
+        // Get the active commitment
+        if (commitments.length == 0 || commitments[0].weeksRemaining < 1) {
+            // User has no commitments or no active commitments
             return res
                 .status(400)
-                .json({ msg: 'There is no commitment for this user' });
+                .json({ msg: 'There is no active commitment for this user' });
         }
-        res.json(commitment);
+        res.json(commitments[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
