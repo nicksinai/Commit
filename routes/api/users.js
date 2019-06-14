@@ -3,8 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const keys = require('../../config/keys');
 const { check, validationResult } = require('express-validator/check');
 const User = require('../../models/User');
+const auth = require('../../middleware/auth');
+const stripe = require('stripe')(keys.stripeSecretKey);
 
 // @route   POST api/users
 // @desc    Sign Up User
@@ -73,5 +76,33 @@ router.post(
         }
     }
 );
+
+// @route   POST api/users/stripeID
+// @desc    Add stripe customer ID to a User
+// @access  Private
+router.put('/stripeID', auth, async (req, res) => {
+    // Obtain stripe token from client
+    const token = req.body.stripeToken;
+
+    try {
+        // Obtain user from database
+        let user = await User.findById(req.user.id);
+
+        // Create stripe customer
+        const customer = await stripe.customers.create({
+            source: token,
+            email: user.email
+        });
+
+        // Save stripe customer ID to User
+        user.stripeID = customer.id;
+        await user.save();
+
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
 
 module.exports = router;
