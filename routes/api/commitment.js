@@ -113,9 +113,6 @@ router.put('/checkin/history', auth, async (req, res) => {
         now.setHours(0, 0, 0, 0);
 
         if (lastSuccessfulCheckin.getTime() === now.getTime()) {
-            console.log(lastSuccessfulCheckin.getTime);
-            console.log(now.getTime);
-
             // User has already had a successful checkin today
             return res.status(403).json({
                 msg: 'Only one successful checkin per day is allowed'
@@ -130,10 +127,24 @@ router.put('/checkin/history', auth, async (req, res) => {
             });
         }
 
-        res.json('Success!');
         // Decrement checkins remaining & set lastSuccessfulCheckin
-        // Update checkin history
+        commitments[0].checkins.remaining -= 1;
+        commitments[0].checkins.lastSuccessfulCheckin = now;
+
+        // // Update checkin history
+        // Build checkin object
+        const newCheckinHistory = {
+            success: true,
+            location: req.body.location,
+            created: now
+        };
+
+        commitments[0].checkins.history.unshift(newCheckinHistory);
+
         // Save
+        await commitments[0].save();
+
+        res.json(commitments[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
