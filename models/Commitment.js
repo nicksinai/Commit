@@ -34,6 +34,10 @@ const CommitmentSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        lastSuccessfulCheckin: {
+            type: Date,
+            required: true
+        },
         history: [
             {
                 success: {
@@ -46,7 +50,7 @@ const CommitmentSchema = new mongoose.Schema({
                 },
                 created: {
                     type: Date,
-                    default: Date.now
+                    required: true
                 }
             }
         ]
