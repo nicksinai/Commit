@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator/check');
 const Commitment = require('../../models/Commitment');
-const User = require('../../models/User');
+const geometry = require('spherical-geometry-js');
 
 // @route   GET api/commitment/me
 // @desc    Get current user's active commitment
@@ -88,7 +88,6 @@ router.post(
 // @route   PUT api/commitment/checkin
 // @desc    Verify checkin and update commitment
 // @access  Private
-// @note    This could do with a refactor to separate concerns
 router.put('/checkin/history', auth, async (req, res) => {
     // Get user's active commitment
     try {
@@ -120,10 +119,26 @@ router.put('/checkin/history', auth, async (req, res) => {
         }
 
         // Handle if location doesn't match user's gym
-        if (commitments[0].gym !== req.body.location) {
-            // User has already had a successful checkin today
+        // Get gym coords from DB
+        const gymLatLng = new geometry.LatLng(
+            commitments[0].gym.lat,
+            commitments[0].gym.lng
+        );
+
+        // Get current coords from client
+        const curLatLng = new geometry.LatLng(req.body.lat, req.body.lng);
+
+        // Calculate distance between user's location and their gym
+        const distance = geometry.computeDistanceBetween(curLatLng, gymLatLng);
+
+        // Set accuracy allowance in meters
+        const ACCURACY_ALLOWANCE = 50;
+
+        // Determine if user is close enough to gym to checkin
+        if (distance > ACCURACY_ALLOWANCE) {
+            // User is greater than the accuracy allowance from gym (in meters)
             return res.status(403).json({
-                msg: 'Current location does not match commitment gym'
+                msg: 'Current location is too far from commitment gym'
             });
         }
 
@@ -135,7 +150,10 @@ router.put('/checkin/history', auth, async (req, res) => {
         // Build checkin object
         const newCheckinHistory = {
             success: true,
-            location: req.body.location,
+            location: {
+                lat: req.body.lat,
+                lng: req.body.lng
+            },
             created: now
         };
 
@@ -145,6 +163,39 @@ router.put('/checkin/history', auth, async (req, res) => {
         await commitments[0].save();
 
         res.json(commitments[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// @route   POST api/commitment/geometryTest
+// @desc    Test the spherical-geometry-js library
+// @access  Private
+router.post('/geometryTest', auth, async (req, res) => {
+    try {
+        // Get all of a user's commitments
+        const commitments = await Commitment.find({ user: req.user.id }).sort(
+            '-created'
+        );
+        // Get the active commitment
+        if (commitments.length == 0 || commitments[0].weeksRemaining < 1) {
+            // User has no commitments or no active commitments
+            return res
+                .status(400)
+                .json({ msg: 'There is no active commitment for this user' });
+        }
+
+        // Get gym coords from DB
+        const gymLatLng = new geometry.LatLng(
+            commitments[0].gym.lat,
+            commitments[0].gym.lng
+        );
+        // Get current coords from client
+        const curLatLng = new geometry.LatLng(req.body.lat, req.body.lng);
+        // Compare coords
+        // Respond
+        res.json(geometry.computeDistanceBetween(curLatLng, gymLatLng));
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

@@ -14,8 +14,14 @@ const CommitmentSchema = new mongoose.Schema({
         required: true
     },
     gym: {
-        type: String,
-        required: true
+        lat: {
+            type: Number,
+            required: true
+        },
+        lng: {
+            type: Number,
+            required: true
+        }
     },
     price: {
         type: Number,
@@ -45,8 +51,14 @@ const CommitmentSchema = new mongoose.Schema({
                     required: true
                 },
                 location: {
-                    type: String,
-                    required: true
+                    lat: {
+                        type: Number,
+                        required: true
+                    },
+                    lng: {
+                        type: Number,
+                        required: true
+                    }
                 },
                 created: {
                     type: Date,
