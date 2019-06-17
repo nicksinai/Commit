@@ -110,6 +110,7 @@ router.put('/checkin/history', auth, async (req, res) => {
             commitments[0].checkins.lastSuccessfulCheckin;
 
         let now = new Date();
+        // Zero time so only considering date
         now.setHours(0, 0, 0, 0);
 
         if (lastSuccessfulCheckin.getTime() === now.getTime()) {
