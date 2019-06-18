@@ -4,8 +4,8 @@
     "description": "Go to the gym, or pay the price",
     "main": "server.js",
     "scripts": {
-        "start": "node server.js",
-        "server": "nodemon server.js"
+        "start": "node server",
+        "server": "nodemon server"
     },
     "author": "Nicholas Sinai",
     "license": "MIT",
