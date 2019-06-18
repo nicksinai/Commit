@@ -4,7 +4,7 @@
     "description": "Go to the gym, or pay the price",
     "main": "server.js",
     "scripts": {
-        "start": "node server",
+        "start": "node server.js",
         "server": "nodemon server.js"
     },
     "author": "Nicholas Sinai",
