@@ -35,6 +35,10 @@ const CommitmentSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    nextDeadline: {
+        type: Date,
+        required: true
+    },
     checkins: {
         remaining: {
             type: Number,

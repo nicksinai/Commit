@@ -67,6 +67,13 @@ router.post(
         if (price) commitmentFields.price = price;
         commitmentFields.weeksRemaining = weeks;
 
+        // Create nextDeadline and add
+        let now = new Date();
+        now.setHours(0, 0, 0, 0);
+        commitmentFields.nextDeadline = new Date(
+            now.setDate(now.getDate() + 7)
+        );
+
         // Build checkins object
         commitmentFields.checkins = {};
         commitmentFields.checkins.remaining = days;
@@ -154,7 +161,7 @@ router.put('/checkin/history', auth, async (req, res) => {
                 lat: req.body.lat,
                 lng: req.body.lng
             },
-            created: now
+            created: Date.now
         };
 
         commitments[0].checkins.history.unshift(newCheckinHistory);
