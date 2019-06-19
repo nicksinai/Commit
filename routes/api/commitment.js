@@ -161,7 +161,7 @@ router.put('/checkin/history', auth, async (req, res) => {
                 lat: req.body.lat,
                 lng: req.body.lng
             },
-            created: Date.now
+            created: Date.now()
         };
 
         commitments[0].checkins.history.unshift(newCheckinHistory);
