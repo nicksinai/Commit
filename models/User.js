@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    stripeID: {
+    stripeId: {
         type: String
     }
 });

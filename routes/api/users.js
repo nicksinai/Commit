@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const keys = require('../../config/keys');
+const stripe = require('stripe')(keys.stripeSecretKey);
 const { check, validationResult } = require('express-validator/check');
 const User = require('../../models/User');
 const auth = require('../../middleware/auth');
-const stripe = require('stripe')(keys.stripeSecretKey);
 
 // @route   POST api/users
 // @desc    Sign Up User
@@ -80,7 +80,7 @@ router.post(
 // @route   POST api/users/stripeID
 // @desc    Add stripe customer ID to a User
 // @access  Private
-router.put('/stripeID', auth, async (req, res) => {
+router.put('/stripeId', auth, async (req, res) => {
     // Obtain stripe token from client
     const token = req.body.stripeToken;
 
@@ -95,7 +95,7 @@ router.put('/stripeID', auth, async (req, res) => {
         });
 
         // Save stripe customer ID to User
-        user.stripeID = customer.id;
+        user.stripeId = customer.id;
         await user.save();
 
         res.json(user);
