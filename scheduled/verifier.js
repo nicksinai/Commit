@@ -15,14 +15,10 @@ const verifier = async () => {
             weeksRemaining: { $gt: 0 },
             nextDeadline: { $lte: now }
         });
-
         // Chsrge if checkins remaining > 0
+        // Also update commitment
         await chargeIncompleteWeeks(eligible);
-
-        // Update eligible commitments weeks remaining, checkins remaining, & next deadline
-        // // Decrement weeks remaining by 1
-        // // Set checkins remaining to commitment's 'days' value
-        // // Increase nextDeadline by 7 days
+        await saveArray(eligible);
     } catch (err) {
         console.error(err);
         process.exit(1);
@@ -38,6 +34,7 @@ const chargeIncompleteWeeks = async eligible => {
             if (commitment.checkins.remaining > 0) {
                 // Get user
                 const user = await User.findById(commitment.user);
+                console.log(user);
 
                 // Charge user
                 const charge = await stripe.charges.create({
@@ -47,9 +44,29 @@ const chargeIncompleteWeeks = async eligible => {
                     receipt_email: user.email
                 });
             }
+            console.log(commitment);
+            // Update eligible commitments weeks remaining, checkins remaining, & next deadline
+            // // Decrement weeks remaining by 1
+            commitment.weeksRemaining -= 1;
+            // // Set checkins remaining to commitment's 'days' value
+            commitment.checkins.remaining = commitment.days;
+            // // Increase nextDeadline by 7 days
+            let temp = commitment.nextDeadline;
+            temp.setDate(temp.getDate() + 7);
+            commitment.nextDeadline = temp.toString();
+            console.log(commitment);
+
+            await commitment.save();
         })
     );
 };
+
+async function saveArray(array) {
+    for (const commitment of array) {
+        await commitment.save();
+    }
+    console.log('Saved!');
+}
 
 // Main
 console.log('Starting Verifier...');
