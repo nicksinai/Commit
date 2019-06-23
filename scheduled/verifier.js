@@ -15,10 +15,9 @@ const verifier = async () => {
             weeksRemaining: { $gt: 0 },
             nextDeadline: { $lte: now }
         });
-        // Chsrge if checkins remaining > 0
+        // Charge if checkins remaining > 0
         // Also update commitment
         await chargeIncompleteWeeks(eligible);
-        await saveArray(eligible);
     } catch (err) {
         console.error(err);
         process.exit(1);
@@ -51,22 +50,16 @@ const chargeIncompleteWeeks = async eligible => {
             // // Set checkins remaining to commitment's 'days' value
             commitment.checkins.remaining = commitment.days;
             // // Increase nextDeadline by 7 days
-            let temp = commitment.nextDeadline;
-            temp.setDate(temp.getDate() + 7);
-            commitment.nextDeadline = temp.toString();
+            commitment.nextDeadline.setDate(commitment.nextDeadline.getDate() + 7);
+            // Built-in Date methods are not hooked into the mongoose change tracking logic
+            // // https://mongoosejs.com/docs/schematypes.html#dates
+            commitment.markModified('nextDeadline');
             console.log(commitment);
 
             await commitment.save();
         })
     );
 };
-
-async function saveArray(array) {
-    for (const commitment of array) {
-        await commitment.save();
-    }
-    console.log('Saved!');
-}
 
 // Main
 console.log('Starting Verifier...');
