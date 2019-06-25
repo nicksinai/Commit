@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Landing from './components/Landing';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
@@ -23,7 +23,9 @@ const App = () => {
         <Provider store={store}>
             <Router>
                 <Fragment>
-                    <h1>Commit</h1>
+                    <Link className="logo" to="/">
+                        <h1>Commit</h1>
+                    </Link>
                     <Route exact path="/" component={Landing} />
                     <Switch>
                         <Route exact path="/signup" component={SignUp} />

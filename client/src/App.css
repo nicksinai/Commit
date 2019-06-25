@@ -35,3 +35,9 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+a.logo,
+a.logo:visited {
+    text-decoration: none;
+    color: black;
+}
