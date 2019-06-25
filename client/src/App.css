@@ -36,8 +36,11 @@ img {
     height: auto;
 }
 
-a.logo,
-a.logo:visited {
+a:visited {
+    color: blue;
+}
+
+a.logo {
     text-decoration: none;
     color: black;
 }

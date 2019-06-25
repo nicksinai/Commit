@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../actions/auth';
 import PropTypes from 'prop-types';
 
-const SignUp = ({ signup }) => {
+const SignUp = ({ signup, isAuthenticated }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -24,6 +25,12 @@ const SignUp = ({ signup }) => {
             signup({ name, email, password });
         }
     };
+
+    // Redirect if logged in
+    // TODO: Redirect to new commitment flow if no active commitment
+    if (isAuthenticated) {
+        return <Redirect to="/new" />;
+    }
 
     return (
         <Fragment>
@@ -72,11 +79,16 @@ const SignUp = ({ signup }) => {
 };
 
 SignUp.propTypes = {
-    signup: PropTypes.func.isRequired
+    signup: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
 };
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
 
 // If you don't want to subscribe to store updates, pass null or undefined in place of mapStateToProps.
 export default connect(
-    null,
+    mapStateToProps,
     { signup }
 )(SignUp);

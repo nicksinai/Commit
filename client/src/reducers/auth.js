@@ -12,7 +12,8 @@ const initialState = {
     isAuthenticated: null,
     loading: true,
     // This is for a registered user so I actualy might need their commitment instead of their user, or both?
-    user: null
+    user: null,
+    active: null
 };
 
 export default function(state = initialState, action) {
@@ -29,6 +30,7 @@ export default function(state = initialState, action) {
         case SIGNUP_SUCCESS:
         case LOGIN_SUCCESS:
             localStorage.setItem('token', payload.token);
+
             return {
                 ...state,
                 ...payload,

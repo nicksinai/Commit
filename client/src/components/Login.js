@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../actions/auth';
 
-const Login = ({ login }) => {
+const Login = ({ login, isAuthenticated, active }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -18,6 +19,12 @@ const Login = ({ login }) => {
         e.preventDefault();
         login(email, password);
     };
+
+    // Redirect if logged in
+    // TODO: Redirect to new commitment flow if no active commitment
+    if (isAuthenticated) {
+        return active ? <Redirect to="/dashboard" /> : <Redirect to="/new" />;
+    }
 
     return (
         <Fragment>
@@ -48,10 +55,16 @@ const Login = ({ login }) => {
 };
 
 Login.propTypes = {
-    login: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
 };
 
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    active: state.auth.active
+});
+
 export default connect(
-    null,
+    mapStateToProps,
     { login }
 )(Login);
