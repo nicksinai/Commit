@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Fragment, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Landing from './components/Landing';
+import SignUp from './components/SignUp';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 import './App.css';
+// Redux
+import { Provider } from 'react-redux';
+import store from './store';
+import setAuthToken from './utils/setAuthToken';
+import { loadUser } from './actions/auth';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+if (localStorage.token) {
+    setAuthToken(localStorage.token);
 }
+
+const App = () => {
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, []);
+    return (
+        <Provider store={store}>
+            <Router>
+                <Fragment>
+                    <h1>Commit</h1>
+                    <Route exact path="/" component={Landing} />
+                    <Switch>
+                        <Route exact path="/signup" component={SignUp} />
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/dashboard" component={Dashboard} />
+                    </Switch>
+                </Fragment>
+            </Router>
+        </Provider>
+    );
+};
 
 export default App;
