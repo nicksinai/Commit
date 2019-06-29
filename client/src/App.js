@@ -25,7 +25,7 @@ const App = () => {
     }, []);
     return (
         <Provider store={store}>
-            <StripeProvider apiKey="pk_test_S8dLxRtLOIklyHOP7hf3Q3gA00LSUvfOwL">
+            <StripeProvider apiKey="pk_live_1TopdyOGpyS9CUx5Q3XxADCd00rycLeHCT">
                 <Router>
                     <Fragment>
                         <Link className="logo" to="/">
