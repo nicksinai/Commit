@@ -44,3 +44,7 @@ a.logo {
     text-decoration: none;
     color: black;
 }
+
+#pac-input {
+    width: 80%;
+}

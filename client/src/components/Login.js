@@ -20,7 +20,7 @@ const Login = ({ login, isAuthenticated, active }) => {
         login(email, password);
     };
 
-    // Redirect if logged in
+    // Redirect if logged insla
     // TODO: Redirect to new commitment flow if no active commitment
     if (isAuthenticated) {
         return active ? <Redirect to="/dashboard" /> : <Redirect to="/new" />;

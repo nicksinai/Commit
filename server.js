@@ -1,5 +1,8 @@
 const express = require('express');
 const db = require('./config/db');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
@@ -8,7 +11,9 @@ db.connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false }));
-
+app.use(morgan('combined'));
+app.use(bodyParser.json());
+app.use(cors());
 // Confirm API Running
 app.get('/', (req, res) => res.send('API Running'));
 
