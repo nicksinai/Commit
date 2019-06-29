@@ -1,20 +1,43 @@
 import React, { Fragment, useState } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Map from './Map';
+import { createCommitment } from '../actions/commitment';
 
-const NewCommitment = () => {
+const NewCommitment = ({ createCommitment, history }) => {
     const [formData, setFormData] = useState({
-        days: null
+        days: '',
+        weeks: '',
+        gym: {
+            lat: 0,
+            lng: 0
+        },
+        price: ''
     });
+
+    // TODO: Get not gym working
+    const { days, weeks, price, gym } = formData;
+    const { lat, lng } = gym;
+
+    const onChange = e =>
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const onSubmit = e => {
+        e.preventDefault();
+        createCommitment(formData, history);
+    };
+
     return (
         <Fragment>
-            <form>
+            <form onSubmit={e => onSubmit(e)}>
                 <input
                     name="days"
                     type="number"
                     required={true}
                     placeholder="Days per week"
+                    value={days}
+                    onChange={e => onChange(e)}
                 />{' '}
                 <br />
                 <input
@@ -22,6 +45,8 @@ const NewCommitment = () => {
                     type="number"
                     required={true}
                     placeholder="Weeks in a row"
+                    value={weeks}
+                    onChange={e => onChange(e)}
                 />{' '}
                 <br />
                 <Map /> <br />
@@ -30,13 +55,8 @@ const NewCommitment = () => {
                     type="number"
                     required={true}
                     placeholder="Price per failed week"
-                />{' '}
-                <br />
-                <input
-                    name="stripe"
-                    type="number"
-                    required={true}
-                    placeholder="Stripe"
+                    value={price}
+                    onChange={e => onChange(e)}
                 />{' '}
                 <br />
                 <input name="submit" type="submit" value="Next" />
@@ -45,6 +65,11 @@ const NewCommitment = () => {
     );
 };
 
-NewCommitment.propTypes = {};
+NewCommitment.propTypes = {
+    createCommitment: PropTypes.func.isRequired
+};
 
-export default NewCommitment;
+export default connect(
+    null,
+    { createCommitment }
+)(withRouter(NewCommitment));

@@ -25,12 +25,10 @@ const App = () => {
     }, []);
     return (
         <Provider store={store}>
-            <StripeProvider apiKey="pk_live_1TopdyOGpyS9CUx5Q3XxADCd00rycLeHCT">
+            <StripeProvider apiKey="pk_test_S8dLxRtLOIklyHOP7hf3Q3gA00LSUvfOwL">
                 <Router>
                     <Fragment>
-                        <Link className="logo" to="/">
-                            <h1>Commit</h1>
-                        </Link>
+                        <h1>Commit</h1>
                         <Route exact path="/" component={Landing} />
                         <Switch>
                             <Route exact path="/signup" component={SignUp} />

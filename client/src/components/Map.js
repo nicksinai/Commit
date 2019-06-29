@@ -35,6 +35,7 @@ export default function Map({ options, onMount, className }) {
     return (
         <input
             id="pac-input"
+            required={true}
             onKeyDown={e => {
                 if (e.keyCode === 13) {
                     e.preventDefault();
