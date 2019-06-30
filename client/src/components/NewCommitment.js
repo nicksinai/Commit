@@ -18,7 +18,6 @@ const NewCommitment = ({ createCommitment, history }) => {
 
     // TODO: Get not gym working
     const { days, weeks, price, gym } = formData;
-    const { lat, lng } = gym;
 
     const onChange = e =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,9 +27,15 @@ const NewCommitment = ({ createCommitment, history }) => {
         createCommitment(formData, history);
     };
 
+    const handleGymChange = gym => {
+        setFormData({ ...formData, gym: { lat: gym.lat, lng: gym.lng } });
+    };
+
     return (
         <Fragment>
             <form onSubmit={e => onSubmit(e)}>
+                <label for="map">Gym:</label>
+                <Map id="map" onGymChange={handleGymChange} /> <br />
                 <input
                     name="days"
                     type="number"
@@ -49,7 +54,6 @@ const NewCommitment = ({ createCommitment, history }) => {
                     onChange={e => onChange(e)}
                 />{' '}
                 <br />
-                <Map /> <br />
                 <input
                     name="price"
                     type="number"

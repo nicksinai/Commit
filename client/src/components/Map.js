@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-export default function Map({ options, onMount, className }) {
+export default function Map({ options, onMount, className, onGymChange }) {
     const props = { ref: useRef(), className };
     const onLoad = () => {
         const map = new window.google.maps.places.Autocomplete(
@@ -12,9 +12,16 @@ export default function Map({ options, onMount, className }) {
             let place = map.getPlace();
             let lat = place.geometry.location.lat();
             let lng = place.geometry.location.lng();
-            // dispatch update to the new commitment
-            console.log(`${lat}, ${lng}`);
+            const gym = {
+                lat,
+                lng
+            };
+            handleChange(gym);
         });
+    };
+
+    const handleChange = gym => {
+        onGymChange(gym);
     };
 
     useEffect(() => {
