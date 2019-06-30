@@ -64,7 +64,8 @@ router.post(
         if (days) commitmentFields.days = days;
         if (weeks) commitmentFields.weeks = weeks;
         if (gym) commitmentFields.gym = gym;
-        if (price) commitmentFields.price = price;
+        // Convert price to stripe format
+        if (price) commitmentFields.price = price * 100;
         commitmentFields.weeksRemaining = weeks;
 
         // Create nextDeadline and add

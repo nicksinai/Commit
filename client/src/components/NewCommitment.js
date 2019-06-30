@@ -34,7 +34,7 @@ const NewCommitment = ({ createCommitment, history }) => {
     return (
         <Fragment>
             <form onSubmit={e => onSubmit(e)}>
-                <label for="map">Gym:</label>
+                <p>Find your gym and build your commitment</p>
                 <Map id="map" onGymChange={handleGymChange} /> <br />
                 <input
                     name="days"
@@ -58,7 +58,7 @@ const NewCommitment = ({ createCommitment, history }) => {
                     name="price"
                     type="number"
                     required={true}
-                    placeholder="Price per failed week"
+                    placeholder="Price per failed week ($)"
                     value={price}
                     onChange={e => onChange(e)}
                 />{' '}
