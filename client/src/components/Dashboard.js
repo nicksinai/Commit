@@ -28,11 +28,11 @@ const Dashboard = props => {
                             alert('Checkin Successful');
                         }
                     } catch (err) {
-                        alert(err.message);
+                        alert(err.response.data.msg);
                     }
                 },
                 err => {
-                    alert(err.message);
+                    alert(err.response.data.msg);
                 },
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 15000 }
             );

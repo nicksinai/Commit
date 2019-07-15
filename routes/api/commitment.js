@@ -146,7 +146,8 @@ router.put('/checkin/history', auth, async (req, res) => {
         if (distance > ACCURACY_ALLOWANCE) {
             // User is greater than the accuracy allowance from gym (in meters)
             return res.status(403).json({
-                msg: 'Current location is too far from commitment gym'
+                msg:
+                    'Current location is too far from commitment gym. Move and try again.'
             });
         }
 
