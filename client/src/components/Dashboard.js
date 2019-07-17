@@ -32,7 +32,7 @@ const Dashboard = props => {
                     }
                 },
                 err => {
-                    alert(err.response.data.msg);
+                    alert(err);
                 },
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 15000 }
             );
