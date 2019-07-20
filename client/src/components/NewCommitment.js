@@ -63,7 +63,7 @@ const NewCommitment = ({ createCommitment, history }) => {
                     onChange={e => onChange(e)}
                 />{' '}
                 <br />
-                <input name="submit" type="submit" value="Next" />
+                <input name="submit" type="submit" value="Commit" />
             </form>
         </Fragment>
     );
