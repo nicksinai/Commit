@@ -15,8 +15,10 @@ const verifier = async () => {
             weeksRemaining: { $gt: 0 },
             nextDeadline: { $lte: now }
         });
+
         // Charge if checkins remaining > 0
         // Also update commitment
+
         await chargeIncompleteWeeks(eligible);
     } catch (err) {
         console.error(err);
@@ -36,12 +38,16 @@ const chargeIncompleteWeeks = async eligible => {
                 console.log(user);
 
                 // Charge user
-                const charge = await stripe.charges.create({
-                    amount: commitment.price,
-                    currency: 'usd',
-                    customer: user.stripeId,
-                    receipt_email: user.email
-                });
+                try {
+                    const charge = await stripe.charges.create({
+                        amount: commitment.price,
+                        currency: 'usd',
+                        customer: user.stripeId,
+                        receipt_email: user.email
+                    });
+                } catch (err) {
+                    console.error(err);
+                }
             }
             console.log(commitment);
             // Update eligible commitments weeks remaining, checkins remaining, & next deadline
@@ -50,7 +56,9 @@ const chargeIncompleteWeeks = async eligible => {
             // // Set checkins remaining to commitment's 'days' value
             commitment.checkins.remaining = commitment.days;
             // // Increase nextDeadline by 7 days
-            commitment.nextDeadline.setDate(commitment.nextDeadline.getDate() + 7);
+            commitment.nextDeadline.setDate(
+                commitment.nextDeadline.getDate() + 7
+            );
             // Built-in Date methods are not hooked into the mongoose change tracking logic
             // // https://mongoosejs.com/docs/schematypes.html#dates
             commitment.markModified('nextDeadline');
