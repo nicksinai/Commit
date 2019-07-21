@@ -140,14 +140,13 @@ router.put('/checkin/history', auth, async (req, res) => {
         const distance = geometry.computeDistanceBetween(curLatLng, gymLatLng);
 
         // Set accuracy allowance in meters
-        const ACCURACY_ALLOWANCE = 50;
+        const ACCURACY_ALLOWANCE = 100;
 
         // Determine if user is close enough to gym to checkin
         if (distance > ACCURACY_ALLOWANCE) {
             // User is greater than the accuracy allowance from gym (in meters)
             return res.status(403).json({
-                msg:
-                    'Current location is too far from commitment gym. Move and try again.'
+                msg: `Current location is too far from commitment gym (${distance} m) . Move and try again.`
             });
         }
 

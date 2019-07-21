@@ -34,7 +34,7 @@ const Dashboard = props => {
                 err => {
                     alert(err);
                 },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 15000 }
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 10000 }
             );
         } else {
             alert('Geolocation is not available on this browser right now.');
