@@ -33,6 +33,16 @@ class _CardForm extends React.Component {
 
         return (
             <div className="checkout">
+                <h3>Set your payment method</h3>
+                <ul>
+                    <li>
+                        <b>
+                            You will only be charged if you fail to check in
+                            enough by the end of a week.
+                        </b>
+                    </li>
+                    <li>Payment details are secured and handled by Stripe.</li>
+                </ul>
                 <CardElement />
                 <button onClick={this.submit}>Set Payment Method</button>
             </div>

@@ -106,9 +106,10 @@ router.put('/checkin/history', auth, async (req, res) => {
         // Get the active commitment
         if (commitments.length == 0 || commitments[0].weeksRemaining < 1) {
             // User has no commitments or no active commitments
-            return res
-                .status(400)
-                .json({ msg: 'There is no active commitment for this user' });
+            return res.status(400).json({
+                msg:
+                    'You do not have an active commitment. To make a new commitment, visit https://commit-hq.herokuapp.com/new.'
+            });
         }
 
         // Handle if user has already had a successful checkin today

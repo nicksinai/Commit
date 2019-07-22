@@ -34,7 +34,7 @@ const NewCommitment = ({ createCommitment, history }) => {
     return (
         <Fragment>
             <form onSubmit={e => onSubmit(e)}>
-                <p>Find your gym and build your commitment</p>
+                <h3>Find your gym and build your commitment</h3>
                 <Map id="map" onGymChange={handleGymChange} /> <br />
                 <input
                     name="days"
