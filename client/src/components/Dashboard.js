@@ -32,7 +32,22 @@ const Dashboard = props => {
                     }
                 },
                 err => {
-                    alert(err);
+                    switch (err.code) {
+                        case err.PERMISSION_DENIED:
+                            alert('User denied the request for Geolocation.');
+                            break;
+                        case err.POSITION_UNAVAILABLE:
+                            alert('Location information is unavailable.');
+                            break;
+                        case err.TIMEOUT:
+                            alert(
+                                'The request to get user location timed out.'
+                            );
+                            break;
+                        case err.UNKNOWN_ERROR:
+                            alert('An unknown error occurred.');
+                            break;
+                    }
                 },
                 { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
             );
