@@ -58,7 +58,7 @@ const SignUp = ({ signup, isAuthenticated }) => {
                     name="password"
                     type="password"
                     required={true}
-                    placeholder="Password"
+                    placeholder="Password (8+)"
                     value={password}
                     onChange={e => onChange(e)}
                 />{' '}
@@ -67,7 +67,7 @@ const SignUp = ({ signup, isAuthenticated }) => {
                     name="password2"
                     type="password"
                     required={true}
-                    placeholder="Password"
+                    placeholder="Password (8+)"
                     value={password2}
                     onChange={e => onChange(e)}
                 />{' '}
